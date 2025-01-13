@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, url_for, flash, redirect, jso
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your secret key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -68,11 +69,15 @@ def delete(id):
     flash(f'Data point with ID {id} was successfully deleted!')
     return redirect(url_for('index'))
 
-# API endpoint: Get all data points
 @app.route('/api/data', methods=['GET'])
-def api_get_data():
-    datapoints = DataPoint.query.all()
-    return jsonify([datapoint.to_dict() for datapoint in datapoints])
+def get_data():
+    datapoints = DataPoint.query.all()  # Get all records from the database
+    if datapoints:
+        result = [{"id": dp.id, "hours_studied": dp.hours_studied, "sleep_hours": dp.sleep_hours, "performance_level": dp.performance_level} for dp in datapoints]
+        return jsonify(result), 200
+    else:
+        return jsonify({"error": "No data found"}), 404  # Handle the case where no data is found
+
 
 # API endpoint: Add a new data point
 @app.route('/api/data', methods=['POST'])
@@ -98,16 +103,18 @@ def api_add_data():
     db.session.commit()
     return jsonify({"id": new_datapoint.id}), 201
 
-# API endpoint: Delete a data point
 @app.route('/api/data/<int:record_id>', methods=['DELETE'])
-def api_delete_data(record_id):
-    datapoint = DataPoint.query.get(record_id)
-    if datapoint is None:
-        return jsonify({"error": "Record not found"}), 404
+def delete_data(record_id):
+    datapoint = DataPoint.query.get(record_id)  # Get the record by ID
 
-    db.session.delete(datapoint)
-    db.session.commit()
-    return jsonify({"id": record_id}), 200
+    if datapoint is None:
+        return jsonify({"error": "Record not found"}), 404  # If record not found
+
+    db.session.delete(datapoint)  # Delete the record
+    db.session.commit()  # Commit the transaction to the database
+
+    return jsonify({"deleted_record_id": record_id}), 200  # Return a success message
+
 
 # Run the app
 if __name__ == '__main__':
