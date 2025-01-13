@@ -1,5 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Welcome to FlaskBlog {% endblock %}</h1>
+    <h1>{% block title %}Datapoints{% endblock %}</h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Hours Studied</th>
+                <th scope="col">Sleep Hours</th>
+                <th scope="col">Performance Level</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+<tbody>
+    {% for datapoint in datapoints %}
+        <tr>
+            <td>{{ datapoint.id }}</td>
+            <td>{{ datapoint.hours_studied }}</td>
+            <td>{{ datapoint.sleep_hours }}</td>
+            <td>{{ datapoint.performance_level }}</td>
+            <td>
+                <form action="{{ url_for('delete', id=datapoint.id) }}" method="post" class="d-inline-block">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+    </table>
 {% endblock %}

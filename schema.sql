@@ -1,8 +1,9 @@
-DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS datapoints;
 
-CREATE TABLE posts (
+
+CREATE TABLE datapoints (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL
+    hours_studied REAL NOT NULL,
+    sleep_hours REAL NOT NULL,
+    performance_level INTEGER NOT NULL
 );

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Create a New Post {% endblock %}</h1>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-danger">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<form method="POST">
+    <div class="form-group">
+        <label for="hours_studied">Hours Studied:</label>
+        <input type="number" name="hours_studied" step="0.01" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="sleep_hours">Sleep Hours:</label>
+        <input type="number" name="sleep_hours" step="0.01" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="performance_level">Performance Level:</label>
+        <input type="number" name="performance_level" step="1" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+{% endblock %}
