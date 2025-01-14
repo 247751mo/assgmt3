@@ -43,7 +43,7 @@ def test_delete_data(record_id):
 def main():
     test_get_data()  # Test GET request
     test_post_data()  # Test POST request
-    test_delete_data(2)  # Test DELETE request (adjust ID as needed)
+    test_delete_data(9)  # Test DELETE request (adjust ID as needed)
 
 if __name__ == "__main__":
     main()
